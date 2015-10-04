@@ -19,13 +19,15 @@ The (single) video is played in a loop.
 
 The program runs on a Raspberry Pi.
 
+The program can be terminated with Ctrl+C.
+
 ## Details
 
 ### PIR (motion) sensor
 
 The PIR sensor is connected to a GPIO.
 
-The PIR sensor signals with <br>
+The PIR sensor signals with
 * a LOW signal that there is no motion detected,<br>
 * a HIGH signal that motion has been detected.
 
@@ -51,3 +53,4 @@ The GPIO support is done with python module 'RPi.GPIO'.
 
 ## History
 * V0.10 Initial version
+* V0.11 Added video file exists check.
