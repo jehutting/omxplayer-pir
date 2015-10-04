@@ -28,7 +28,7 @@ import RPi.GPIO as GPIO
 __author__ = 'Jozef Hutting'
 __copyright__ = 'Copyright (C) 2015 Jozef Hutting <jehutting@gmail.com>'
 __license__ = 'GPLv2'
-__version__ = '0.10'
+__version__ = '0.11'
 
 # the REAL OMXPlayer
 OMXPLAYER = 'omxplayer'
@@ -88,6 +88,10 @@ class OMXPlayer:
                      .format(self.process.returncode))
             self.completed = True
             return
+
+        if not os.path.isfile(filename):
+             self.log_error('Error: File "{0}" not found!'.format(filename))
+             raise IOError(filename)
 
         self.thread = threading.Thread(target=run_in_thread, args=())
         self.thread.start()
@@ -183,6 +187,9 @@ class Main():
     def log(self, args):
         self.logger.debug('{0}'.format(args))
 
+    def log_error(self, args):
+        self.logger.error('{0}'.format(args))
+
     def run(self, filename):
       global omxplayer
 
@@ -191,6 +198,7 @@ class Main():
 
       omxplayer = OMXPlayer()
       pir_control = PirControl()
+      return_code = 0 # OK
 
       try:    
 
@@ -217,6 +225,10 @@ class Main():
           while(not omxplayer.completed):
                continue            
 
+      except IOError as e:
+          self.log_error('Error: File "{0}" not found!'.format(e.message))
+          return_code = -1
+
       except KeyboardInterrupt:
           """http://stackoverflow.com/questions/19807134/python-sub-process-ctrlc"""
           self.log('KeyboardInterrupt')
@@ -224,7 +236,7 @@ class Main():
 
       print('EXIT')
       GPIO.cleanup()
-      return 0 # OK
+      return return_code
 
 
 if __name__ == '__main__':
@@ -234,9 +246,13 @@ if __name__ == '__main__':
     #filename = sys.argv[1]
     filename = '/mnt/video.mp4'
 
+    if not os.path.isfile(filename):
+        print('Error: File "{0}" not found!'.format(filename))
+        sys.exit(-1)
+
     try:
-       mainloop = Main();
-       return_code = mainloop.run(filename);
+        mainloop = Main();
+        return_code = mainloop.run(filename);
     finally:
         pass
  
