@@ -28,7 +28,7 @@ import RPi.GPIO as GPIO
 __author__ = 'Jozef Hutting'
 __copyright__ = 'Copyright (C) 2015 Jozef Hutting <jehutting@gmail.com>'
 __license__ = 'GPLv2'
-__version__ = '0.11'
+__version__ = '0.12'
 
 # the REAL OMXPlayer
 OMXPLAYER = 'omxplayer'
@@ -43,6 +43,12 @@ omxplayer = None
 
 
 class OMXPlayer:
+
+    '''
+    Note: this python wrapper to control OMXPlayer is a very simple implementation.
+    If you want a more (on the edge) control over OMXPlayer, I suggest to use 
+    Will Price OMXPlayer wrapper (https://github.com/willprice/python-omxplayer-wrapper).
+    '''
 
     process = None
     running = False
@@ -136,8 +142,8 @@ class OMXPlayer:
 class PirControl():
 
     '''
-    PIR sensor input signal :
-    - value 0 : sensor Ready
+    PIR (motion) sensor input signal :
+    - value 0 : no motion detected
     - value 1 : motion detected
     '''
 
@@ -149,15 +155,17 @@ class PirControl():
         self.gpio = 7  # BCM port number!
         GPIO.setup(self.gpio, GPIO.IN)
         # ----------------------------------------------------------------------
+        self.state = self.__get_state()
+        self.log('initial state={0}'.format(self.state))
 
-    def ready(self):
-        return GPIO.input(self.gpio) == 0
+    def __get_state(self):
+        return GPIO.input(self.gpio)
 
     def start(self):
         self.log('start')
         GPIO.add_event_detect(self.gpio, GPIO.BOTH, callback=self.edge_callback
                               )#, bouncetime=1)
-        self.state = GPIO.input(self.gpio)
+        self.state = self.__get_state()
         self.log('initial state={0}'.format(self.state))
 
     def log(self, args):
@@ -165,10 +173,10 @@ class PirControl():
 
     def edge_callback(self, channel):
         global omplayer
-        state = GPIO.input(self.gpio)
+        state = self.__get_state()
         self.log('Edge detected {0}=>{1}'.format(self.state, state))
         # Hmmm...sometimes I get 0=0 and 1=>1 edges!?
-        # I ONLY want the real edges 
+        # I ONLY want the real edges!
         if state != self.state:
             if state == 1: # edge 0=>1
                 self.log('Motion detected!')
@@ -177,6 +185,10 @@ class PirControl():
                 self.log('NO motion detected')
                 omxplayer.pause();
             self.state = state
+
+    def motion_detected(self):
+        self.state = self.__get_state()
+        return self.state == 1
 
 
 class Main():
@@ -202,10 +214,12 @@ class Main():
 
       try:    
 
-          self.log('Waiting for PIR sensor to be ready...');
-          while(not pir_control.ready()):
+          self.log('Waiting for operator clearing the scene...');
+          while(pir_control.motion_detected()):
               continue;
-          self.log('PIR sensor ready!');
+          self.log('Video player is armed!');
+
+          # handle the PIR sensor signal edges
           pir_control.start()
 
           # OMXPlayer doesn't have the ability to start in a PAUSED state, and

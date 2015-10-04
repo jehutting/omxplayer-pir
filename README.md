@@ -21,6 +21,9 @@ The program runs on a Raspberry Pi.
 
 The program can be terminated with Ctrl+C.
 
+Upon startup the program waits until the operator leaves the scene. Once the operator
+has left the scene the fun starts.
+
 ## Details
 
 ### PIR (motion) sensor
@@ -54,3 +57,4 @@ The GPIO support is done with python module 'RPi.GPIO'.
 ## History
 * V0.10 Initial version
 * V0.11 Added video file exists check.
+* V0.12 Changed 'the ẃaiting for PIR ready' into 'operator has left the scene'.
