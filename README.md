@@ -2,6 +2,14 @@
 
 A motion activated video player.
 
+As the player is using OMXPlayer, one can also play sound only (e.g. MP3 file),
+and therefore making this a motion activated audio player as well.
+
+Any digital (On/Off) signal can be used to trigger the player.
+E.g. connect a button to the GPIO in stead of a PIR sensor.
+
+Therefore more generic, this is a digital trigger activated video/audio player.
+
 ## Introduction
 
 This python program has been written as an example for a [Motion activated video player 
@@ -19,20 +27,23 @@ The (single) video is played in a loop.
 
 The program runs on a Raspberry Pi.
 
-The program can be terminated with Ctrl+C.
-
-Upon startup the program waits until the operator leaves the scene. Once the operator
+Upon startup, the program waits until the operator leaves the scene. Once the operator
 has left the scene the fun starts.
+
+The program can be terminated with Ctrl+C.
 
 ## Details
 
 ### PIR (motion) sensor
 
+PIR stands for Passive Infra Red. A PIR sensor detects the change of the
+infra red signature of its environment.
+
 The PIR sensor is connected to a GPIO.
 
 The PIR sensor signals with
-* a LOW signal that there is no motion detected,<br>
-* a HIGH signal that motion has been detected.
+* a LOW (/Off) signal that there is no motion detected,<br>
+* a HIGH (/On) signal that motion has been detected.
 
 ### The video player (OMXPlayer)
 
@@ -57,4 +68,4 @@ The GPIO support is done with python module 'RPi.GPIO'.
 ## History
 * V0.10 Initial version
 * V0.11 Added video file exists check.
-* V0.12 Changed 'the ẃaiting for PIR ready' into 'operator has left the scene'.
+* V0.12 Changed 'waiting for PIR ready' into 'waiting for operator leaving the scene'.
