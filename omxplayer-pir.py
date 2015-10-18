@@ -28,7 +28,13 @@ import RPi.GPIO as GPIO
 __author__ = 'Jozef Hutting'
 __copyright__ = 'Copyright (C) 2015 Jozef Hutting <jehutting@gmail.com>'
 __license__ = 'GPLv2'
-__version__ = '0.12'
+__version__ = '0.13'
+
+# USAGE
+#     sudo python omxplayer-pir FILE
+# where
+#     FILE is the name of the file to play 
+
 
 # the REAL OMXPlayer
 OMXPLAYER = 'omxplayer'
@@ -257,8 +263,7 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.DEBUG)
 
-    #filename = sys.argv[1]
-    filename = '/mnt/video.mp4'
+    filename = sys.argv[1]
 
     if not os.path.isfile(filename):
         print('Error: File "{0}" not found!'.format(filename))

@@ -30,7 +30,17 @@ The program runs on a Raspberry Pi.
 Upon startup, the program waits until the operator leaves the scene. Once the operator
 has left the scene the fun starts.
 
-The program can be terminated with Ctrl+C.
+The program is terminated with Ctrl+C.
+
+## Usage
+
+To run the program<br>
+&nbsp;&nbsp;&nbsp;&nbsp;sudo python omxplayer-pir FILE<br>
+where<br>
+&nbsp;&nbsp;&nbsp;&nbsp;FILE is the name of the file to play.
+
+The program is terminated by CTRL+C.
+
 
 ## Details
 
@@ -69,3 +79,4 @@ The GPIO support is done with python module 'RPi.GPIO'.
 * V0.10 Initial version
 * V0.11 Added video file exists check.
 * V0.12 Changed 'waiting for PIR ready' into 'waiting for operator leaving the scene'.
+* V0.13 Name of the file to play is now a commandline argument.
