@@ -8,7 +8,7 @@ and therefore making this a motion activated audio player as well.
 Any digital (On/Off) signal can be used to trigger the player.
 E.g. connect a button to the GPIO in stead of a PIR sensor.
 
-Therefore more generic, this is a digital trigger activated video/audio player.
+Therefore more generic, this is a digital trigger activated video/audio/sound player.
 
 ## Introduction
 
@@ -35,12 +35,11 @@ The program is terminated with Ctrl+C.
 ## Usage
 
 To run the program<br>
-&nbsp;&nbsp;&nbsp;&nbsp;sudo python omxplayer-pir FILE<br>
+&nbsp;&nbsp;&nbsp;&nbsp;sudo python omxplayer-pir.py FILE<br>
 where<br>
 &nbsp;&nbsp;&nbsp;&nbsp;FILE is the name of the file to play.
 
 The program is terminated by CTRL+C.
-
 
 ## Details
 
@@ -80,3 +79,6 @@ The GPIO support is done with python module 'RPi.GPIO'.
 * V0.11 Added video file exists check.
 * V0.12 Changed 'waiting for PIR ready' into 'waiting for operator leaving the scene'.
 * V0.13 Name of the file to play is now a commandline argument.
+* V0.14 The python commands needs omxplayer-pir.py, so with the .py, the python script file extension.
+        Checking the number of arguments as when given no FILE argument the
+        "IndexError: list index out of range" appears.

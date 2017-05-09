@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 #
-#      Copyright (C) 2015 Jozef Hutting <jehutting@gmail.com>
+#      Copyright (C) 2015-2017 Jozef Hutting <jehutting@gmail.com>
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,7 +28,7 @@ import RPi.GPIO as GPIO
 __author__ = 'Jozef Hutting'
 __copyright__ = 'Copyright (C) 2015 Jozef Hutting <jehutting@gmail.com>'
 __license__ = 'GPLv2'
-__version__ = '0.13'
+__version__ = '0.14'
 
 # USAGE
 #     sudo python omxplayer-pir FILE
@@ -263,12 +263,25 @@ if __name__ == '__main__':
 
     logging.basicConfig(level=logging.DEBUG)
 
+    # we need at least one FILE argument...
+    if len(sys.argv) < 2:
+        print('Error: missing FILE argument!')
+        sys.exit(-3)
+
+    # ... and at most one FILE argument
+    if len(sys.argv) > 2:
+        print('Error: too many arguments! Only one FILE argument expected.')
+        sys.exit(-2)
+
+    # so we only have one argument and that's the FILE argument
     filename = sys.argv[1]
 
+    # check if the file exists
     if not os.path.isfile(filename):
         print('Error: File "{0}" not found!'.format(filename))
         sys.exit(-1)
 
+    # so far so good, so let's play :-)
     try:
         mainloop = Main();
         return_code = mainloop.run(filename);
